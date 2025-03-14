@@ -29,7 +29,7 @@ jobs:
         
         # 安装Python依赖
         python -m pip install --upgrade pip setuptools wheel
-        pip install pyinstaller pyqt5==5.15.7 --config-settings --verbose --no-build-isolation
+        pip install pyinstaller pyqt5==5.15.7 --verbose --no-build-isolation
     
     - name: Build Application
       run: |
