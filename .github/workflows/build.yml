@@ -16,11 +16,20 @@ jobs:
     
     - name: Install dependencies
       run: |
-        brew install qt@5
-        echo 'export PATH="/usr/local/opt/qt@5/bin:$PATH"' >> ~/.bash_profile
-        source ~/.bash_profile
-        python -m pip install --upgrade pip
-        pip install pyinstaller pyqt5==5.15.7 pyqt5-sip
+        # 安装完整Qt开发工具链
+        brew install qt@5 pkg-config
+        # 获取Qt安装路径并配置环境变量
+        QT_PATH=$(brew --prefix qt@5)
+        echo "QT_PATH=${QT_PATH}" >> $GITHUB_ENV
+        echo "${QT_PATH}/bin" >> $GITHUB_PATH
+        
+        # 链接Qt库
+        sudo ln -sf "${QT_PATH}/lib" /usr/local/lib
+        sudo ln -sf "${QT_PATH}/bin/qmake" /usr/local/bin/qmake
+        
+        # 安装Python依赖
+        python -m pip install --upgrade pip setuptools wheel
+        pip install pyinstaller pyqt5==5.15.7 --config-settings --verbose --no-build-isolation
     
     - name: Build Application
       run: |
